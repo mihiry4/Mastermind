@@ -22,46 +22,16 @@ import javafx.stage.Stage;
  * The game ends when the color string is correct -- and the player wins -- or they give
  * 10 incorrect guesses -- and they lose.
  */
-public class Mastermind extends Application {
+public class Mastermind{
 
-	/**
-	 * main: Takes user arguments and initiates games
-	 * @param String[] args
-	 * @return NONE
-	 */ 
-//	public static void main(String[] args) {
-//		if(args[0].equals("-text")) {
-//			MastermindGUIView m1 = new MastermindGUIView();
-//			m1.play();
-//		} else if(args[0].equals("-window")) {
-//			MastermindGUIView m2 = new MastermindGUIView();
-//			m2.play();
-//		}
-//	}
-	
-	public void start(Stage stage) throws Exception {
-		BorderPane pane = new BorderPane();
-		Label label = new Label("Seeing this window means JavaFX is installed correctly.");
-		pane.setTop(label);
-		Button btnClickMe = new Button("Click Me");
-		pane.setCenter(btnClickMe);
-		btnClickMe.setOnAction((event) -> { 
-			Alert a = new Alert(Alert.AlertType.INFORMATION);
-			a.setTitle("JavaFX Works!");
-			a.setContentText("JavaFX appears to be properly installed");
-			a.setHeaderText("JavaFX Test");
-			a.showAndWait();
-		});
 		
-		Scene scene = new Scene(pane, 300, 200);
-		stage.setScene(scene);
-		stage.setTitle("JavaFX Test");
-		stage.show();
-		
-	}
-
 	public static void main(String[] args) {
-		Application.launch(args);
+		if(args[0].equals("-text")) {
+			MastermindTextView m1 = new MastermindTextView();
+			m1.play();
+		} else if(args[0].equals("-window")) {
+			Application.launch(MastermindGUIView.class, args);
+		}
 	}
 
 }
