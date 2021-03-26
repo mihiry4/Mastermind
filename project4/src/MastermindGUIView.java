@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,8 +11,10 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -26,41 +29,37 @@ public class MastermindGUIView extends Application {
 	
 	public void start(Stage stage) throws Exception {
 		BorderPane pane = new BorderPane();
-        GridPane gridPane = new GridPane();
-        gridPane.setStyle("-fx-background-color: coral");
-		Paint blackpaint = Paint.valueOf("black");
-		Paint whitePaint = Paint.valueOf("white");
-		pane.setCenter(gridPane);
+        GridPane bottomGridPane = new GridPane();
 
-		gridPane.setHgap(30);
-		gridPane.setVgap(10);
-		gridPane.setPadding(new Insets(5, 5, 5, 5));
-		for(int i = 1;i<=10;i++) {
-			Label text = new Label(Integer.toString(i));
-			text.setFont(new Font("Arial", 20));
-			gridPane.add(text,0,i,1, 1);
-			for (int j = 1; j < 5; j++) {
-				Circle circle = new Circle(20);
-				gridPane.add(circle,j,i,1, 1);
-				circle.setFill(blackpaint);
-			}
-			for(int j =5;j<7;j++) {
-				Circle smallCircle = new Circle(5);
-				gridPane.add(smallCircle,j,i,1, 1);
-				smallCircle.setFill(blackpaint);
-			}
-			
-			
-			
+        VBox vbox = new VBox(10);
+        pane.setCenter(vbox);
+        pane.setBottom(bottomGridPane);
+        vbox.setStyle("-fx-background-color: tan");
+        vbox.setPadding(new Insets(5, 5, 5, 5));
+        
+        // putting new gridpane in vbox
+        for(int i = 1;i<=10;i++) {
+        	vbox.getChildren().add(addGP(i));
+        }
+        
+        // putting 
+        
+        
+        
+        
+        // bottom grid pane
+        bottomGridPane.setStyle("-fx-background-color: white");
+        bottomGridPane.setPadding(new Insets(5, 5, 5, 5));
+        bottomGridPane.setHgap(30);
+		for(int i = 1;i<5;i++) {
+			Circle circle = new Circle(20);
+			bottomGridPane.add(circle,i,0,1, 1);
 		}
-		
-		
-		TilePane lastTile = addTile(pane);
-		pane.setBottom(lastTile);
 		Button guessButton = new Button("Guess");
-		lastTile.getChildren().add(guessButton);
+		bottomGridPane.add(guessButton,5,0);
 		
 		
+		// stage setup
 		Scene scene = new Scene(pane, 400, 600);
 		stage.setScene(scene);
 		stage.setTitle("Mastermind");
@@ -68,20 +67,40 @@ public class MastermindGUIView extends Application {
 		
 	}
 	
-	
-	public TilePane addTile(BorderPane pane) {
-		TilePane tile = new TilePane();	
-		Paint paint = Paint.valueOf("black");
-		tile.setMaxHeight(20);
-		tile.setPadding(new Insets(5, 5, 5, 5));
-		tile.setHgap(30);
-		for (int i = 0; i < 4; i++) {
-			Circle circle = new Circle(20);
-	        tile.getChildren().add(circle);
-			circle.setFill(paint);
-	    }
-		return tile;
+	public GridPane addGP(int guessIndex) {
+		 GridPane gridPane = new GridPane();
+		 gridPane.setHgap(30);
+
+     	Label text = new Label(Integer.toString(guessIndex));
+     	text.setFont(new Font("Arial", 20));
+     	gridPane.add(text, 0, 0);
+		 for(int i = 1;i<5;i++) {
+				Circle circle = new Circle(20);
+				gridPane.add(circle,i,0,1, 1);
+			}
+		 gridPane.add(addStatusGP(), 5, 0);
+
+		 return gridPane;
 	}
 	
-	
+	public GridPane addStatusGP() {
+		 GridPane gridPane = new GridPane();
+		 gridPane.setHgap(5);
+		 gridPane.setVgap(5);
+		 gridPane.setPadding(new Insets(5, 5, 5, 5));
+		 Paint blackpaint = Paint.valueOf("black");
+		 Paint whitePaint = Paint.valueOf("white");
+
+		for(int i = 0;i<2;i++) {
+			Circle circle = new Circle(5);
+			circle.setFill(blackpaint);
+			gridPane.add(circle,i,0,1, 1);
+		}
+		for(int i = 0;i<2;i++) {
+			Circle circle = new Circle(5);
+			circle.setFill(whitePaint);
+			gridPane.add(circle,i,1,1, 1);
+		}
+		return gridPane;
+	}	
 }
