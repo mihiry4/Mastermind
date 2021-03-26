@@ -68,6 +68,14 @@ public class MastermindGUIView extends Application {
 			String color2 = getButtonColor(colorButton2);
 			String color3 = getButtonColor(colorButton3);
 			String color4 = getButtonColor(colorButton4);
+			if(color1.equals("black")||color2.equals("black")
+				|| color3.equals("black") || color4.equals("black")) {
+				Alert a = new Alert(Alert.AlertType.INFORMATION);
+				a.setTitle("Mastermind");
+				a.setContentText("Please select 4 colors");
+				a.setHeaderText("Try again!");
+				a.showAndWait();
+			} else {
 			GridPane temp =addGP(p,color1,color2,color3,color4);
 			if(temp != null) {
 				vbox.getChildren().add(temp);
@@ -82,6 +90,7 @@ public class MastermindGUIView extends Application {
 			resetColor(colorButton2);
 			resetColor(colorButton3);
 			resetColor(colorButton4);
+			}
 		});
 		
 		
