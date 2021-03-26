@@ -1,4 +1,7 @@
+import java.util.Arrays;
+
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,6 +26,7 @@ import javafx.stage.Stage;
 
 public class MastermindGUIView extends Application {
 
+	
 	public MastermindGUIView() {
 	}
 
@@ -47,13 +51,25 @@ public class MastermindGUIView extends Application {
         
         
         
+        
         // bottom grid pane
         bottomGridPane.setStyle("-fx-background-color: white");
         bottomGridPane.setPadding(new Insets(5, 5, 5, 5));
         bottomGridPane.setHgap(30);
 		for(int i = 1;i<5;i++) {
-			Circle circle = new Circle(20);
-			bottomGridPane.add(circle,i,0,1, 1);
+			Button roundButton = new Button();
+	     	roundButton.setStyle(
+	                "-fx-background-radius: 40px; "+
+	                "-fx-background-color: black;"+
+	                "-fx-min-width: 40px; " +
+	                "-fx-min-height: 40px; " +
+	                "-fx-max-width: 40px; " +
+	                "-fx-max-height: 40px;"
+	        );
+	     	roundButton.setOnAction((event)->{
+	     		ButtonOnAction(event,roundButton);
+	     	});
+			bottomGridPane.add(roundButton,i,0,1, 1);
 		}
 		Button guessButton = new Button("Guess");
 		bottomGridPane.add(guessButton,5,0);
@@ -66,6 +82,44 @@ public class MastermindGUIView extends Application {
 		stage.show();
 		
 	}
+	public void ButtonOnAction (ActionEvent event, Button roundButton) {
+		String s = roundButton.getStyle();
+		String[] temp = s.split(";");
+		int tempInd = temp[1].indexOf(':');
+		String color = temp[1].substring(tempInd+2);
+		String[] colors = new String[] {"red","orange","yellow",
+				"green","blue","purple"};
+		int ind = findIndex(colors,color);
+		if(ind<colors.length-1) {
+			color = colors[ind+1];
+		} else {
+			color = colors[0];
+		}
+		roundButton.setStyle ("-fx-background-radius: 40px; "+
+                "-fx-background-color: "+ color + ";"+
+                "-fx-min-width: 40px; " +
+                "-fx-min-height: 40px; " +
+                "-fx-max-width: 40px; " +
+                "-fx-max-height: 40px;");
+
+	}
+	public int findIndex(String arr[], String t)
+    {
+ 
+		int len = arr.length;
+        int i = 0;
+ 
+        while (i < len) {
+            if (arr[i].equals(t)) {
+                return i;
+            }
+            else {
+                i = i + 1;
+            }
+        }
+        return -1;
+    }
+
 	
 	public GridPane addGP(int guessIndex) {
 		 GridPane gridPane = new GridPane();
@@ -74,13 +128,12 @@ public class MastermindGUIView extends Application {
      	Label text = new Label(Integer.toString(guessIndex));
      	text.setFont(new Font("Arial", 20));
      	gridPane.add(text, 0, 0);
-		 for(int i = 1;i<5;i++) {
-				Circle circle = new Circle(20);
-				gridPane.add(circle,i,0,1, 1);
-			}
-		 gridPane.add(addStatusGP(), 5, 0);
-
-		 return gridPane;
+		for(int i = 1;i<5;i++) {
+			Circle circle = new Circle(20);
+			gridPane.add(circle,i,0,1, 1);
+		}
+		gridPane.add(addStatusGP(), 5, 0);
+		return gridPane;
 	}
 	
 	public GridPane addStatusGP() {
