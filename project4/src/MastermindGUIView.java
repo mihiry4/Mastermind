@@ -26,7 +26,8 @@ import javafx.stage.Stage;
 
 public class MastermindGUIView extends Application {
 
-	
+    private int p = 1;
+
 	public MastermindGUIView() {
 	}
 
@@ -42,37 +43,48 @@ public class MastermindGUIView extends Application {
         vbox.setPadding(new Insets(5, 5, 5, 5));
         
         // putting new gridpane in vbox
-        for(int i = 1;i<=10;i++) {
-        	vbox.getChildren().add(addGP(i));
-        }
-        
-        // putting 
-        
-        
-        
+//        for(int i = 1;i<=10;i++) {
+//        	vbox.getChildren().add(addGP(i));
+//        }
         
         
         // bottom grid pane
         bottomGridPane.setStyle("-fx-background-color: white");
         bottomGridPane.setPadding(new Insets(5, 5, 5, 5));
         bottomGridPane.setHgap(30);
-		for(int i = 1;i<5;i++) {
-			Button roundButton = new Button();
-	     	roundButton.setStyle(
-	                "-fx-background-radius: 40px; "+
-	                "-fx-background-color: black;"+
-	                "-fx-min-width: 40px; " +
-	                "-fx-min-height: 40px; " +
-	                "-fx-max-width: 40px; " +
-	                "-fx-max-height: 40px;"
-	        );
-	     	roundButton.setOnAction((event)->{
-	     		ButtonOnAction(event,roundButton);
-	     	});
-			bottomGridPane.add(roundButton,i,0,1, 1);
-		}
+		Button colorButton1 = createButton();
+		Button colorButton2 = createButton();
+		Button colorButton3 = createButton();
+		Button colorButton4 = createButton();
+		bottomGridPane.add(colorButton1,1,0,1, 1);
+		bottomGridPane.add(colorButton2,2,0,1, 1);
+		bottomGridPane.add(colorButton3,3,0,1, 1);
+		bottomGridPane.add(colorButton4,4,0,1, 1);
+		
 		Button guessButton = new Button("Guess");
 		bottomGridPane.add(guessButton,5,0);
+		guessButton.setOnAction((event)->{
+			String color1 = getButtonColor(colorButton1);
+			String color2 = getButtonColor(colorButton2);
+			String color3 = getButtonColor(colorButton3);
+			String color4 = getButtonColor(colorButton4);
+			GridPane temp =addGP(p,color1,color2,color3,color4);
+			if(temp != null) {
+				vbox.getChildren().add(temp);
+			} else {
+				Alert a = new Alert(Alert.AlertType.INFORMATION);
+				a.setTitle("Mastermind");
+				a.setContentText("You Lost! Please try again.");
+				a.setHeaderText("Out of turns");
+				a.showAndWait();
+			}
+			resetColor(colorButton1);
+			resetColor(colorButton2);
+			resetColor(colorButton3);
+			resetColor(colorButton4);
+		});
+		
+		
 		
 		
 		// stage setup
@@ -82,11 +94,34 @@ public class MastermindGUIView extends Application {
 		stage.show();
 		
 	}
+	
+	public void resetColor(Button button) {
+		button.setStyle ("-fx-background-radius: 40px; "+
+                "-fx-background-color: black;"+
+                "-fx-min-width: 40px; " +
+                "-fx-min-height: 40px; " +
+                "-fx-max-width: 40px; " +
+                "-fx-max-height: 40px;");
+	}
+	
+	public Button createButton() {
+		Button colorButton = new Button();
+		colorButton.setStyle(
+                "-fx-background-radius: 40px; "+
+                "-fx-background-color: black;"+
+                "-fx-min-width: 40px; " +
+                "-fx-min-height: 40px; " +
+                "-fx-max-width: 40px; " +
+                "-fx-max-height: 40px;"
+        );
+		colorButton.setOnAction((event)->{
+     		ButtonOnAction(event,colorButton);
+     	});
+		return colorButton;
+	}
+	
 	public void ButtonOnAction (ActionEvent event, Button roundButton) {
-		String s = roundButton.getStyle();
-		String[] temp = s.split(";");
-		int tempInd = temp[1].indexOf(':');
-		String color = temp[1].substring(tempInd+2);
+		String color = getButtonColor(roundButton);
 		String[] colors = new String[] {"red","orange","yellow",
 				"green","blue","purple"};
 		int ind = findIndex(colors,color);
@@ -103,9 +138,17 @@ public class MastermindGUIView extends Application {
                 "-fx-max-height: 40px;");
 
 	}
+	
+	public String getButtonColor(Button button) {
+		String s = button.getStyle();
+		String[] temp = s.split(";");
+		int tempInd = temp[1].indexOf(':');
+		String color = temp[1].substring(tempInd+2);
+		return color;
+	}
+	
 	public int findIndex(String arr[], String t)
     {
- 
 		int len = arr.length;
         int i = 0;
  
@@ -121,19 +164,35 @@ public class MastermindGUIView extends Application {
     }
 
 	
-	public GridPane addGP(int guessIndex) {
-		 GridPane gridPane = new GridPane();
-		 gridPane.setHgap(30);
-
+	public GridPane addGP(int guessIndex, String color1, String color2, 
+			String color3, String color4) {
+		if(p>10)
+			return null;
+		GridPane gridPane = new GridPane();
+		gridPane.setHgap(30);
      	Label text = new Label(Integer.toString(guessIndex));
      	text.setFont(new Font("Arial", 20));
      	gridPane.add(text, 0, 0);
-		for(int i = 1;i<5;i++) {
-			Circle circle = new Circle(20);
-			gridPane.add(circle,i,0,1, 1);
-		}
+		Circle circle1 = new Circle(20);
+		circle1.setFill(getPaint(color1));
+		gridPane.add(circle1,1,0,1, 1);
+		Circle circle2 = new Circle(20);
+		circle2.setFill(getPaint(color2));
+		gridPane.add(circle2,2,0,1, 1);
+		Circle circle3 = new Circle(20);
+		circle3.setFill(getPaint(color3));
+		gridPane.add(circle3,3,0,1, 1);
+		Circle circle4 = new Circle(20);
+		circle4.setFill(getPaint(color4));
+		gridPane.add(circle4,4,0,1, 1);
 		gridPane.add(addStatusGP(), 5, 0);
+		p++;
 		return gridPane;
+	}
+	
+	public Paint getPaint(String s) {
+		Paint paint1 = Paint.valueOf(s);
+		return paint1;
 	}
 	
 	public GridPane addStatusGP() {
