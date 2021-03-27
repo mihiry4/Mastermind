@@ -27,8 +27,12 @@ import javafx.stage.Stage;
 public class MastermindGUIView extends Application {
 
     private int p = 1;
+    private MastermindModel model;
+    private boolean gameWon = false;
+
 
 	public MastermindGUIView() {
+		 model = new MastermindModel("rgbp");
 	}
 
 	
@@ -41,11 +45,6 @@ public class MastermindGUIView extends Application {
         pane.setBottom(bottomGridPane);
         vbox.setStyle("-fx-background-color: tan");
         vbox.setPadding(new Insets(5, 5, 5, 5));
-        
-        // putting new gridpane in vbox
-//        for(int i = 1;i<=10;i++) {
-//        	vbox.getChildren().add(addGP(i));
-//        }
         
         
         // bottom grid pane
@@ -79,12 +78,21 @@ public class MastermindGUIView extends Application {
 			GridPane temp =addGP(p,color1,color2,color3,color4);
 			if(temp != null) {
 				vbox.getChildren().add(temp);
+				if(gameWon) {
+					Alert a = new Alert(Alert.AlertType.INFORMATION);
+					a.setTitle("Mastermind");
+					a.setContentText("Congratulations! You won.");
+					a.setHeaderText("Game complete.");
+					a.showAndWait();
+					System.exit(0);
+				}
 			} else {
 				Alert a = new Alert(Alert.AlertType.INFORMATION);
 				a.setTitle("Mastermind");
 				a.setContentText("You Lost! Please try again.");
 				a.setHeaderText("Out of turns");
 				a.showAndWait();
+				System.exit(0);
 			}
 			resetColor(colorButton1);
 			resetColor(colorButton2);
@@ -194,7 +202,7 @@ public class MastermindGUIView extends Application {
 		Circle circle4 = new Circle(20);
 		circle4.setFill(getPaint(color4));
 		gridPane.add(circle4,4,0,1, 1);
-		gridPane.add(addStatusGP(), 5, 0);
+		gridPane.add(addStatusGP(color1,color2,color3,color4), 5, 0);
 		p++;
 		return gridPane;
 	}
@@ -204,20 +212,41 @@ public class MastermindGUIView extends Application {
 		return paint1;
 	}
 	
-	public GridPane addStatusGP() {
+	public GridPane addStatusGP( String color1, String color2, 
+			String color3, String color4) {
+		MastermindController mc = new MastermindController(model);
+		StringBuilder guess = new StringBuilder();
+		guess.append(color1.charAt(0));
+		guess.append(color2.charAt(0));
+		guess.append(color3.charAt(0));
+		guess.append(color4.charAt(0));
+		int RCRP = 0;
+		int RCWP = 0;
+		try {
+			RCRP = mc.getRightColorRightPlace(guess.toString());
+			RCWP = mc.getRightColorWrongPlace(guess.toString());
+		} catch (MastermindIllegalColorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MastermindIllegalLengthException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		 GridPane gridPane = new GridPane();
 		 gridPane.setHgap(5);
 		 gridPane.setVgap(5);
 		 gridPane.setPadding(new Insets(5, 5, 5, 5));
 		 Paint blackpaint = Paint.valueOf("black");
 		 Paint whitePaint = Paint.valueOf("white");
-
-		for(int i = 0;i<2;i++) {
+		if(RCRP == 4)
+			gameWon = true;
+		for(int i = 0;i<RCRP;i++) {
 			Circle circle = new Circle(5);
 			circle.setFill(blackpaint);
 			gridPane.add(circle,i,0,1, 1);
 		}
-		for(int i = 0;i<2;i++) {
+		for(int i = 0;i<RCWP;i++) {
 			Circle circle = new Circle(5);
 			circle.setFill(whitePaint);
 			gridPane.add(circle,i,1,1, 1);
