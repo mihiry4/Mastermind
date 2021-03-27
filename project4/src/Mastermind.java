@@ -24,7 +24,12 @@ import javafx.stage.Stage;
  */
 public class Mastermind{
 
-		
+	 /**
+	 * main: takes command line arguments and calls either GUI view
+	 * or text view of mastermind game
+	 * @param args 
+	 * @return NONE
+	 */
 	public static void main(String[] args) {
 		if(args[0].equals("-text")) {
 			MastermindTextView m1 = new MastermindTextView();

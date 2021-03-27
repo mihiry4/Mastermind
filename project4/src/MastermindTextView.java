@@ -1,11 +1,27 @@
 import java.util.Scanner;
 
+/**
+ * 
+ * @author Mihir Yadav
+ * Name: MastermindTextView class
+ * Description: This class implements text view of mastermind game.
+ */
 public class MastermindTextView {
-
+	
+	 /**
+	 * MastermindTextView: constructor
+	 * @param NONE 
+	 * @return NONE
+	 */
 	public MastermindTextView() {
 		
 	}
 	
+	/**
+	 * play: starts the game
+	 * @param NONE 
+	 * @return NONE
+	 */
 	public void play() {
 		// This class represents the view, it should be how uses play the game
 			System.out.println("Welcome to Mastermind!");
