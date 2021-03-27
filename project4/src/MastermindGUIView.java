@@ -177,7 +177,8 @@ public class MastermindGUIView extends Application {
 	
 	/**
 	 * ButtonOnAction: specifies what a button should do when clicked
-	 * @param event, roundButton
+	 * @param event
+	 * @param roundButton
 	 * @return NONE
 	 */
 	public void ButtonOnAction (ActionEvent event, Button roundButton) {
@@ -213,7 +214,8 @@ public class MastermindGUIView extends Application {
 	
 	/**
 	 * findIndex: finds index of a string in a string array
-	 * @param arr[], t
+	 * @param arr[]
+	 * @param t
 	 * @return i
 	 */
 	public int findIndex(String arr[], String t)
@@ -233,7 +235,11 @@ public class MastermindGUIView extends Application {
 
 	/**
 	 * addGP: adds a new gridPane to canvas
-	 * @param guessIndex, color1, color2, color3, color4
+	 * @param guessIndex
+	 * @param color1
+	 * @param color2
+	 * @param color3
+	 * @param color4
 	 * @return gridPane
 	 */
 	public GridPane addGP(int guessIndex, String color1, String color2, 
@@ -278,7 +284,10 @@ public class MastermindGUIView extends Application {
 	/**
 	 * addStatusGP: adds right color right place and
 	 * right color wrong place circles inside of a gridPane
-	 * @param color1, color2, color3, color4
+	 * @param color1 
+	 * @param color2
+	 * @param color3
+	 * @param color4
 	 * @return gridPane
 	 */
 	public GridPane addStatusGP( String color1, String color2, 
