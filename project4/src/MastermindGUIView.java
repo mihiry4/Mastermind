@@ -41,7 +41,7 @@ public class MastermindGUIView extends Application {
 	 * @return NONE
 	 */
 	public MastermindGUIView() {
-		 model = new MastermindModel("rgbp");
+		 model = new MastermindModel();
 		 p = 1;
 		 gameWon = false;
 		 
@@ -145,7 +145,7 @@ public class MastermindGUIView extends Application {
 	 * @param button 
 	 * @return NONE
 	 */
-	public void resetColor(Button button) {
+	private void resetColor(Button button) {
 		button.setStyle ("-fx-background-radius: 40px; "+
                 "-fx-background-color: black;"+
                 "-fx-min-width: 40px; " +
@@ -159,7 +159,7 @@ public class MastermindGUIView extends Application {
 	 * @param NONE 
 	 * @return colorButton
 	 */
-	public Button createButton() {
+	private Button createButton() {
 		Button colorButton = new Button();
 		colorButton.setStyle(
                 "-fx-background-radius: 40px; "+
@@ -181,7 +181,7 @@ public class MastermindGUIView extends Application {
 	 * @param roundButton
 	 * @return NONE
 	 */
-	public void ButtonOnAction (ActionEvent event, Button roundButton) {
+	private void ButtonOnAction (ActionEvent event, Button roundButton) {
 		String color = getButtonColor(roundButton);
 		String[] colors = new String[] {"red","orange","yellow",
 				"green","blue","purple"};
@@ -204,7 +204,7 @@ public class MastermindGUIView extends Application {
 	 * @param button
 	 * @return color
 	 */
-	public String getButtonColor(Button button) {
+	private String getButtonColor(Button button) {
 		String s = button.getStyle();
 		String[] temp = s.split(";");
 		int tempInd = temp[1].indexOf(':');
@@ -218,7 +218,7 @@ public class MastermindGUIView extends Application {
 	 * @param t
 	 * @return i
 	 */
-	public int findIndex(String arr[], String t)
+	private int findIndex(String arr[], String t)
     {
 		int len = arr.length;
         int i = 0;
@@ -242,7 +242,7 @@ public class MastermindGUIView extends Application {
 	 * @param color4
 	 * @return gridPane
 	 */
-	public GridPane addGP(int guessIndex, String color1, String color2, 
+	private GridPane addGP(int guessIndex, String color1, String color2, 
 			String color3, String color4) {
 		if(p>10)
 			return null;
@@ -276,7 +276,7 @@ public class MastermindGUIView extends Application {
 	 * @param s
 	 * @return Paint
 	 */
-	public Paint getPaint(String s) {
+	private Paint getPaint(String s) {
 		Paint paint1 = Paint.valueOf(s);
 		return paint1;
 	}
@@ -290,7 +290,7 @@ public class MastermindGUIView extends Application {
 	 * @param color4
 	 * @return gridPane
 	 */
-	public GridPane addStatusGP( String color1, String color2, 
+	private GridPane addStatusGP( String color1, String color2, 
 			String color3, String color4) {
 		MastermindController mc = new MastermindController(model);
 		StringBuilder guess = new StringBuilder();
