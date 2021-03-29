@@ -142,14 +142,7 @@ public class MastermindGUIView extends Application {
 		
 	}
 	
-	/**
-	 * resetColor:removes an event handler
-	 * @param button 
-	 * @return NONE
-	 */
-	private void removeEventHandler(Button guessButton) {
-		
-	}
+
 	
 	/**
 	 * resetColor: resets color of a button to black
