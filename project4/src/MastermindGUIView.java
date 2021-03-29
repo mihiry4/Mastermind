@@ -2,6 +2,7 @@ import java.util.Arrays;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -41,7 +43,7 @@ public class MastermindGUIView extends Application {
 	 * @return NONE
 	 */
 	public MastermindGUIView() {
-		 model = new MastermindModel();
+		 model = new MastermindModel("rgbp");
 		 p = 1;
 		 gameWon = false;
 		 
@@ -102,26 +104,26 @@ public class MastermindGUIView extends Application {
 				// add gridPane to vbox
 				GridPane temp =addGP(p,color1,color2,color3,color4);
 				// temp will be null after 10 tries
-				if(temp != null) {
-					vbox.getChildren().add(temp);
-					// if game is won
-					if(gameWon) {
-						// give game won alert
-						Alert a = new Alert(Alert.AlertType.INFORMATION);
-						a.setTitle("Mastermind");
-						a.setContentText("Congratulations! You won.");
-						a.setHeaderText("Game complete.");
-						a.showAndWait();
-						System.exit(0);
-					}
-				} else {
+				vbox.getChildren().add(temp);
+				// if game is won
+				if(gameWon) {
+					// give game won alert
+					Alert a = new Alert(Alert.AlertType.INFORMATION);
+					a.setTitle("Mastermind");
+					a.setContentText("Congratulations! You won.");
+					a.setHeaderText("Game complete.");
+					a.showAndWait();
+					guessButton.setOnAction(null); //unregistered
+
+				}
+				if(p>10) {
 					// give game lost alert
 					Alert a = new Alert(Alert.AlertType.INFORMATION);
 					a.setTitle("Mastermind");
 					a.setContentText("You Lost! Please try again.");
 					a.setHeaderText("Out of turns");
 					a.showAndWait();
-					System.exit(0);
+					guessButton.setOnAction(null); //unregistered
 				}
 				// reset all the colors of 4 buttons in bottom grid
 				resetColor(colorButton1);
@@ -137,6 +139,15 @@ public class MastermindGUIView extends Application {
 		stage.setScene(scene);
 		stage.setTitle("Mastermind");
 		stage.show();
+		
+	}
+	
+	/**
+	 * resetColor:removes an event handler
+	 * @param button 
+	 * @return NONE
+	 */
+	private void removeEventHandler(Button guessButton) {
 		
 	}
 	
@@ -244,9 +255,10 @@ public class MastermindGUIView extends Application {
 	 */
 	private GridPane addGP(int guessIndex, String color1, String color2, 
 			String color3, String color4) {
-		if(p>10)
-			return null;
+	     ColumnConstraints col = new ColumnConstraints();
+	     col.setPercentWidth(10);
 		GridPane gridPane = new GridPane();
+		gridPane.getColumnConstraints().add(col);
 		gridPane.setHgap(30);
      	Label text = new Label(Integer.toString(guessIndex));
      	// adding guess number
